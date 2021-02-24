@@ -1,0 +1,24 @@
+GET /_cluster/health
+
+GET /_cat/nodes?v
+
+// List of indeces that our cluster contain for clues
+GET /_cat/indices
+GET /_cat/indices?v
+
+GET /.kibana/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+//SET new index
+PUT /pages
+
+// List of each shard
+GET /_cat/shards?v
+
+
+// To add new node in the terminal we have to execute (However it's not recomended)
+./bin/elasticsearch -Enode.name=node-3 -Epath.data=./node-3/data -Epath.logs=./node-3/logs

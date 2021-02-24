@@ -1,0 +1,50 @@
+PUT /multi_field_test
+{
+  "mappings": {
+    "properties": {
+      "description": { "type": "text" },
+      "ingredients": { 
+        "type": "text",
+        "fields": {
+          "keyword": {
+            "type": "keyword"
+          }
+        }
+        }
+    }
+  }
+}
+
+
+POST /multi_field_test/_doc
+{
+  "description": "To make this spaghetti carbanara, you first need to...",
+  "ingredients": ["Bacon", "Spaghetti", "Eggs"]
+}
+
+GET /multi_field_test/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET /multi_field_test/_search
+{
+  "query": {
+    "match": {
+      "ingredients": "Bacon"
+    }
+  }
+}
+
+GET /multi_field_test/_search
+{
+  "query": {
+   "term": {
+      "ingredients.keyword": "Bacon"
+   }
+  }
+}
+
+DELETE /multi_field_test

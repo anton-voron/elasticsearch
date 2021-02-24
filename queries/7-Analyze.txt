@@ -1,0 +1,14 @@
+POST /_analyze
+{
+  "text": "2 guys walk into  a bar, but the third... DUKS! :-)",
+  "analyzer": "standard"
+}
+
+
+POST /_analyze
+{
+  "text": "2 guys walk into  a bar, but the third... DUKS! :-)",
+  "char_filter": [], 
+  "tokenizer": "standard",
+  "filter": ["lowercase"]
+}

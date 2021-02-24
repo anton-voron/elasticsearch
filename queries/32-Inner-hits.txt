@@ -1,0 +1,29 @@
+====>>> Select only hits that contain in the query even it's nested
+GET /department/_search
+{
+  "_source": false, ======>>>>> This is important
+  "query": {
+    "nested": {
+      "inner_hits": {},  =====>>>>> This is important
+      "path": "employees", 
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "match": {
+                "employees.position": "intern"
+              }
+            }
+          ],
+          "filter": [
+            {
+              "term": {
+                "employees.gender": "f"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

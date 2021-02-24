@@ -1,0 +1,124 @@
+DOC https://www.elastic.co/guide/en/elasticsearch/reference/7.10/analysis-analyzers.html
+Type of analyzer:
+- standart
+- simple
+- language
+
+
+----------------- Custom analyzer
+PUT /analyzer_test
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_custom_analyzer": {
+          "type": "custom",
+          "char_filter": ["html_strip"],
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "stop",
+            "asciifolding"
+          ]
+        }
+      }
+    }
+  }
+}
+
+
+
+
+------------ Add Danish language support
+PUT /analyzer_test
+{
+  "settings": {
+    "analysis": {
+      "filter": {
+        "danish_stop": {
+          "type": "stop",
+          "stopwords": "_danish_"
+        }
+      },
+      "char_filter": {},
+      "tokenizer": {}, 
+      "analyzer": {
+        "my_custom_analyzer": {
+          "type": "custom",
+          "char_filter": ["html_strip"],
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "danish_stop",
+            "asciifolding"
+          ]
+        }
+      }
+    }
+  }
+}
+
+
+POST /_analyze
+{
+  "char_filter": ["html_strip"],
+  "text": "I&apos;m in a <em>good</em> mood&nbsp;-&nbsp;and I <strong>love</strong> açaí!"
+}
+
+
+POST /analyzer_test/_analyze
+{
+  "analyzer": "my_custom_analyzer", 
+  "text": "I&apos;m in a <em>good</em> mood&nbsp;-&nbsp;and I <strong>love</strong> açaí!"
+}
+
+
+
+
+---------------------- Adding analyzer to existing inedeces
+PUT /analyzer_test
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_custom_analyzer": {
+          "type": "custom",
+          "char_filter": ["html_strip"],
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "stop",
+            "asciifolding"
+          ]
+        }
+      }
+    }
+  }
+}
+
+
+
+PUT /analyzer_test/_settings
+{
+  "analysis": {
+    "analyzer": {
+      "my_secound_analyzer": {
+        "type": "custom",
+        "char_filter": ["html_strip"],
+        "tokenizer": "keyword",
+        "stopwords": "_english_",
+        "filter": [
+          "lowercase",
+          "stop",
+          "asciifolding"
+        ]
+      }
+    }
+  }
+}
+
+POST /analyzer_test/_close
+
+POST /analyzer_test/_open
+
+GET /analyzer_test/_settings

@@ -1,0 +1,72 @@
+OPTION FOR dynamic:
+ture - allow to create doc and index for seraching
+false - allow to create doc reject create index for seraching
+"strict" - reject create doc and reject create index for seraching
+
+
+PUT /people
+{ 
+  "mappings": {
+  "dynamic": false,
+  "numeric_detection": true/false,
+  "date_detection": true/false
+  "dynamic_date_formats": ["dd-MM-yyy"]
+    "properties": {
+      "first_name": {
+        "type": "text"
+      }
+    }
+  }
+}
+
+POST /people/_doc
+{
+  "first_name": "Jhon",
+  "last_name": "Doe"
+}
+
+GET /people/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET /people/_search
+{
+  "query": {
+    "match": {
+      "first_name": "Jhon"
+    }
+  }
+}
+
+
+-------------->>>> This will not find value, cause we set in the mapping "dynamic": false, 
+this allow to create this field but it will not create index for searching
+
+GET /people/_search
+{
+  "query": {
+    "match": {
+      "last_name": "Doe"
+    }
+  }
+}
+
+
+
+DELETE /people
+
+-------------->>>> This will not find value, cause we set in the mapping "dynamic": false, 
+this  allow to create this field but it will not create index for searching
+only will work if we set "first_name": SOME_VALUE
+
+POST /people/_delete_by_query
+{
+  "query": {
+    "match": {
+      "last_name": "Doe"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+
+dynamic_templates allow us to specify data structure that will be created if we add doc dynamicaly
+
+
+
+PUT /dynamic_template
+{
+  "mappings": {
+    "dynamic_templates": [
+      {
+        "integers": {
+          "match_mapping_type": "long",
+          "mapping": {
+            "type": "integer"
+          }
+        }
+      },
+      {
+        "strings": {
+          "match_mapping_type": "string",
+          "mapping": {
+            "type": "text"
+            // Here will not be created fileds keyword etc
+          }
+        }
+      }
+    ]
+  }
+}
+
+POST /dynamic_template/_doc
+{
+  "in_stock": 123,
+  "descripiton": "This shoun not create keyword!!!"
+}
+
+GET /dynamic_template/_mapping
+
+DELETE /dynamic_template

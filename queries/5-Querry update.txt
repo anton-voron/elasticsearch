@@ -1,0 +1,44 @@
+------- UPDATE 
+
+// math-all run query for all documents
+// (not ercomended) if we want to diseble version controll we have to specify "conflicts": "proceed", 
+POST /products/_update_by_query
+{
+  "conflicts": "proceed", 
+  "script": {
+    "source": "ctx._source.in_stock--"
+  },
+  "query": {
+    "match_all": {}
+  }
+}
+
+
+------- GET 
+
+GET /products/_search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+GET /reviews/_search
+{
+  "query": {
+    "match": {
+      "content": "Incredible"
+    }
+  }
+}
+
+
+------- DELETE 
+POST /products/_delete_by_query
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+

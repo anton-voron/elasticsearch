@@ -1,0 +1,11 @@
+// delete index
+DELETE /pages
+
+// Set new index with amount of replicas and shards, (this can be used only for dev NOT PROD)
+PUT /products
+{
+  "settings": {
+    "number_of_shards": 2,
+    "number_of_replicas": 2
+  }
+}

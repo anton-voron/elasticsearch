@@ -1,0 +1,79 @@
+PUT /analyzer_test
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "my_custom_analyzer": {
+          "type": "custom",
+          "char_filter": ["html_strip"],
+          "tokenizer": "standard",
+          "filter": [
+            "lowercase",
+            "stop",
+            "asciifolding"
+          ]
+        }
+      }
+    }
+  }
+}
+
+PUT /analyzer_test/_mapping
+{
+  "properties": {
+    "description": {
+      "type": "text",
+      "analyzer": "my_custom_analyzer"
+    }
+  }
+}
+
+POST /analyzer_test/_doc
+{
+  "description": "Is that Peter's cute-looking dog?"
+}
+
+
+GET /analyzer_test/_search
+{
+  "query": {
+    "match": {
+      "description": {
+        "query": "that",
+        "analyzer": "keyword"
+      }
+    }
+  }
+}
+
+#Remove stop filter
+PUT /analyzer_test/_settings
+{
+  "analysis": {
+    "analyzer": {
+      "my_custom_analyzer": {
+        "type": "custom",
+        "char_filter": ["html_strip"],
+        "tokenizer": "standard",
+        "filter": [
+          "lowercase",
+          "asciifolding"
+        ]
+      }
+    }
+  }
+}
+
+POST /analyzer_test/_close
+POST /analyzer_test/_open
+
+GET /analyzer_test/_settings
+DELETE /analyzer_test
+
+----------Retrieve index settings
+GET /analyzer_test/_settings
+
+
+----------Reindex documents
+POST /analyzer_test/_update_by_query?conflicts=proceed
+

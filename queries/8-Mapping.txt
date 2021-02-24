@@ -1,0 +1,90 @@
+// type: keyword is using for filterring and agrigation
+PUT /reviews
+{
+  "mappings": {
+    "properties": {
+      "rating": { "type": "float" },
+      "content": { "type": "text" },
+      "product_id": { "type": "integer" },
+      "author": {
+        "properties": {
+          "first_name": { "type": "text" },
+          "last_name": { "type": "text" },
+          "email": { "type": "keyword" }
+        }
+      }
+    }
+  }
+}
+
+// Or we can create mapping throught dot
+
+PUT /reviews_dot_notation
+{
+  "mappings": {
+    "properties": {
+      "rating": { "type": "float" },
+      "content": { "type": "text" },
+      "product_id": { "type": "integer" },
+      "author.first_name": { "type": "text" },
+      "author.last_name": { "type": "text" },
+      "author.email": { "type": "keyword" }
+    }
+  }
+}
+
+GET /reviews/_mapping
+GET /reviews/_mapping/field/content
+GET /reviews/_mapping/field/author.email
+
+
+PUT /reviews/_doc/1
+{
+  "rating": 5.0,
+  "content": "Outstanding course! Be really tought me a lot about Elasticsearch!",
+  "product_id": 123,
+  "author": {
+    "first_name": "Jhon",
+    "last_name": "Doe",
+    "email": "jhondoe@hmail.com"
+  }
+}
+
+
+------------ To change existing mapping
+PUT /reviews/_mapping
+{
+  "properties": {
+    "created_at": { "type": "date" }
+  }
+}
+
+------------ To change existing data type we have to create new index like reviews_new with correct data type and then _reindex it 
+POST /_reindex
+{
+  "source": {
+    "index": "reviews"
+  },
+  "dest": {
+    "index": "reviews_new"
+  }
+}
+
+
+///// or like this
+POST /_reindex
+{
+  "source": {
+    "index": "reviews"
+  },
+  "dest": {
+    "index": "reviews_new"
+  },
+  "script": {
+    "source": """
+      if(ctx._source.product_id != null) {
+        ctx._source.producr_id = ctx._source.product_id.toString();
+      }
+    """
+  }
+}

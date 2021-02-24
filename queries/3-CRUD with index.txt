@@ -1,0 +1,108 @@
+------ CREATE
+// add document to index POST /index_name/_doc { options ...}
+POST /products/_doc
+{
+  "name": "Coffe maker",
+  "price": 64,
+  "in_stock": 10
+}
+
+// If we wan to speciffy our own id, we have to use PUT instead of POST
+PUT /products/_doc/100
+{
+  "name": "Toaster",
+  "price": 49,
+  "in_stock": 4
+} 
+
+
+------ READ (Retrieve)
+GET /products/_doc/100
+
+
+------ UPDATE
+POST /products/_update/100
+{
+  "doc": {
+    "in_stock": 2
+  }
+}
+
+//We can add new fields for document
+POST /products/_update/100
+{
+  "doc": {
+    "tags": ["electronics", "mac book"]
+  }
+}
+
+------ SCRIPTED UPDATE
+
+//Decrease for -1 in_stock value 
+POST /products/_update/100
+{
+  "script": {
+    "source": "ctx._source.in_stock--"
+  }
+}
+
+POST /products/_update/100
+{
+  "script": {
+    "source": "ctx._source.in_stock = 10"
+  }
+}
+
+//Update with params
+POST /products/_update/100
+{
+  "script": {
+    "source": "ctx._source.in_stock -= params.quantity",
+    "params": {
+      "quantity": 4
+    }
+  }
+}
+
+// With condition and (ctx.op = 'nope' it's like return)
+POST /products/_update/100
+{
+  "script": {
+    "source": """
+      if(ctx._source.in_stock === 0) {
+        ctx.op = 'nope';
+      }
+      ctx._source.in_stock--;
+    """
+  }
+}
+
+// UPSERTS UPDATE the script is running if document is already exist otherwise the upsert options is edded and a new document
+POST /products/_update/101
+{
+  "script": {
+    "source": "ctx._source.in_stock++"
+  },
+  "upsert": {
+    "name": "Blender",
+    "price": 300,
+    "in_stock": 5
+  }
+}
+
+------ DELETE
+
+DELETE /products/_doc/101
+
+// Delete item from doc (ctx.op = 'delete')
+POST /products/_update/100
+{
+  "script": {
+    "source": """
+      if(ctx._source.in_stock <= 1) {
+        ctx.op = 'delete';
+      }
+      ctx._source.in_stock--;
+    """
+  }
+}

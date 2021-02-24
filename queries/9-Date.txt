@@ -1,0 +1,71 @@
+PUT /reviews
+{
+  "mappings": {
+    "properties": {
+      "rating": { "type": "float" },
+      "content": { "type": "text" },
+      "product_id": { "type": "integer" },
+      "author": {
+        "properties": {
+          "first_name": { "type": "text" },
+          "last_name": { "type": "text" },
+          "email": { "type": "keyword" }
+        }
+      }
+    }
+  }
+}
+
+PUT /reviews/_doc/2
+{
+  "rating": 5.5,
+  "content": "Not bad, not bat at all",
+  "product_id": 111,
+  "created_at": "2021-02-01",
+  "author": {
+    "first_name": "Average",
+    "last_name": "Doe",
+    "email": "avgjoe@example.com"
+  }
+}
+
+PUT /reviews/_doc/3
+{
+  "rating": 3.5,
+  "content": "Could be better",
+  "product_id": 111,
+  "created_at": "2015-12-21T13:07:41Z",
+  "author": {
+    "first_name": "Average",
+    "last_name": "Doe",
+    "email": "avgjoe@example.com"
+  }
+}
+
+PUT /reviews/_doc/4
+{
+  "rating": 5.0,
+  "content": "Incredible",
+  "product_id": 111,
+  "created_at": "2015-12-21T11:01:41+02:00",
+  "author": {
+    "first_name": "Anton",
+    "last_name": "Voron",
+    "email": "aveoron@example.com"
+  }
+}
+
+
+#2015-07-04T12:01:24Z
+PUT /reviews/_doc/4
+{
+  "rating": 4.0,
+  "content": "Very nice",
+  "product_id": 111,
+  "created_at": 1436011284000,
+  "author": {
+    "first_name": "Taylor",
+    "last_name": "West",
+    "email": "twest@example.com"
+  }
+}

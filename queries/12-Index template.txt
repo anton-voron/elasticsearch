@@ -1,0 +1,33 @@
+PUT /_template/access-logs
+{
+  "index_patterns": ["access-logs-*"], 
+  "settings": {
+    "number_of_shards": 2,
+    "index.mapping.coerce": false
+  }, 
+  "mappings": {
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "url.original": {
+        "type": "keyword"
+      },
+      "http.request.referrer": {
+        "type": "keyword"
+      },
+      "http.response.status_code": {
+        "type": "long"
+      }
+    }
+  }
+}
+
+PUT /access-logs-2021-02-01
+
+GET /access-logs-2021-02-01
+
+GET /_template/access-logs
+
+
+DELETE /_template/access-logs

@@ -1,0 +1,65 @@
+======>>> The two queries below are equivalent
+GET /receip/_search
+{
+  "query": {
+    "match": {
+      "title": "pasta carbonara"
+    }
+  }
+}
+
+GET /receip/_search
+{
+  "query": {
+    "bool": {
+      "should": [
+        {
+          "term": {
+            "title": "pasta"
+          }
+        },
+        {
+          "term": {
+            "title": "carbonara"
+          }
+        }
+      ]
+    }
+  }
+}
+
+
+
+
+========>>> The two queries below are equivalent
+GET /receip/_search
+{
+  "query": {
+    "match": {
+      "title": {
+        "query": "pasta carbonara",
+        "operator": "and"
+      }
+    }
+  }
+}
+
+GET /receip/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "match": {
+            "title": "pasta"
+          }
+        },
+        {
+          "match": {
+            "title": "carbonara"
+          }
+        }
+      ]
+    }
+  }
+}
